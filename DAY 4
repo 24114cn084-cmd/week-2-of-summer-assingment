@@ -1,0 +1,90 @@
+REVERSE WORD IN STRING III
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        chars = list(s)
+        n = len(chars)
+        start = 0
+
+        for end in range(n + 1):
+            if end == n or chars[end] == ' ':
+                l, r = start, end - 1
+                while l < r:
+                    chars[l], chars[r] = chars[r], chars[l]
+                    l += 1
+                    r -= 1
+                start = end + 1
+
+        return ''.join(chars)
+
+. Decode String
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<int> countStack;
+        stack<string> stringStack;
+
+        string currString = "";
+        int num = 0;
+
+        for(char ch : s) {
+
+            if(isdigit(ch)) {
+                num = num * 10 + (ch - '0');
+            }
+
+            else if(ch == '[') {
+                countStack.push(num);
+                stringStack.push(currString);
+
+                num = 0;
+                currString = "";
+            }
+
+            else if(ch == ']') {
+                int repeat = countStack.top();
+                countStack.pop();
+
+                string temp = stringStack.top();
+                stringStack.pop();
+
+                while(repeat--) {
+                    temp += currString;
+                }
+
+                currString = temp;
+            }
+
+            else {
+                currString += ch;
+            }
+        }
+
+        return currString;
+    }
+};
+Generate Parentheses 
+class Solution {
+public:
+    vector<string> result;
+
+    void solve(int open, int close, int n, string curr) {
+
+        if(curr.length() == 2 * n) {
+            result.push_back(curr);
+            return;
+        }
+
+        if(open < n) {
+            solve(open + 1, close, n, curr + '(');
+        }
+
+        if(close < open) {
+            solve(open, close + 1, n, curr + ')');
+        }
+    }
+
+    vector<string> generateParenthesis(int n) {
+        solve(0, 0, n, "");
+        return result;
+    }
+};
